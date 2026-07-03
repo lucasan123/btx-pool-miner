@@ -1,0 +1,4 @@
+63e9c448eea1d544a0ed3b5afd4596a894c2bd8d49291f9e59f096813e28f73a  btx-miner-linux.tar.gz
+f2940c618510ad213f21b7062d32a3717ac9fefbc2a382e0a742bbe8b55d4b0f  btx-miner-windows.zip
+f1cdcfd48611980d526744de6559d340e190bc0fd53452d29807ea9d079ad9b7  btx-address-generator.tar.gz
+3646f232a6710221ba5b302dcc88fbf210c8f0f53c95397b9f4a7e5a538fb6ee  btx-address-generator.zip
