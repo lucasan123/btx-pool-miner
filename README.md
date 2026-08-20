@@ -1,37 +1,84 @@
-# BTX GPU Miner — btx-pool.com
+# btx-rc-miner — GPU miner for BTX (MatMul v4.7 "Epoch-A")
 
-# btx-rc-miner v4 — GPU miner for BTX (MatMul v4.7 Epoch-A) · pool btx-pool.com
+Standalone GPU miner for the post-fork BTX chain (block 185000+), built for the
+public pool **[btx-pool.com](https://btx-pool.com)**. A mining attempt is no longer
+a hash: it is a full MatMul *episode* (~141 trillion multiply-accumulates), computed
+entirely on the GPU and verified bit-exactly by the pool.
 
-Miner for the post-fork BTX chain (block 185000+). Mines on the public pool **btx-pool.com:3334**
-(stratum v4, vardiff ≈ 1 share/min per connection, PPLNS on validated work, 3% fee).
+- **No node needed** — the miner only talks to the pool you configure.
+- **Open, auditable payouts** — coinbase is split on-chain among miners in
+  proportion to verified work (30-min window), pool fee 1.5%.
+- **Self-testing** — on every start each GPU must reproduce the reference
+  digests bit-exactly, or the miner refuses to run.
 
 ## Downloads
-| File | What | SHA-256 |
+
+Grab the latest packages from the **[Releases page](../../releases/tag/v4)**:
+
+| File | Size | What it is |
 |---|---|---|
-| `btx-rc-miner-linux-x86_64.tar.gz` | Linux x86-64 miner (`btx-rc-miner`, `mine.sh`, `README.txt`) | see `SHA256SUMS.txt` |
-| `btx-rc-miner-windows-x64.zip` | Windows x64 miner (`btx-rc-miner.exe`, `MINE.bat`, `BENCH.bat`, `BENCH-ALL-GPUS.bat`, `README.txt`) | see `SHA256SUMS.txt` |
-| `btx-address-generator.tar.gz` / `.zip` | Offline BTX address generator (Python) | see `SHA256SUMS.txt` |
-| `SHA256SUMS.txt` | Checksums of all the files above | — |
+| `btx-rc-miner-windows-x64.zip` | ~3 MB | the miner (Windows x64) |
+| `btx-rc-miner-linux-x86_64.tar.gz` | ~3 MB | the miner (Linux x86-64) |
+| `btx-cuda-runtime-windows-x64.zip` | ~385 MB | *optional, one-time*: CUDA libraries, if you don't have the CUDA Toolkit installed |
+| `btx-cuda-runtime-linux-x86_64.tar.gz` | ~400 MB | same, for Linux |
+| `SHA256SUMS.txt` | — | checksums of all of the above |
 
 ## Requirements
-- NVIDIA GPU: binaries contain **RTX 50xx (sm_120, tested by us)**, **RTX 40xx (sm_89)** and **RTX 30xx (sm_86)**. 40xx/30xx are compiled in but not benchmarked by us — the built-in self-test says at once whether the GPU is bit-exact.
-- NVIDIA driver **580+**; **CUDA ≥ 13.2 / cuBLASLt ≥ 13.4** (`libcublasLt.so.13` / `cublasLt64_13.dll`) — we test with CUDA Toolkit 13.3. CUDA 13.0/13.1 give different results: the miner refuses to start.
-- Linux: glibc ≥ 2.35 (Ubuntu 22.04+). Windows: VC++ Redistributable 2015-2022 x64.
+
+1. An **NVIDIA GPU**: RTX 50xx (tested), RTX 40xx (sm_89) and RTX 30xx (sm_86)
+   kernels are all included. The built-in self-test tells you immediately
+   whether your card computes bit-exactly; `BENCH.bat` / `--bench` tells you how fast it is.
+2. **NVIDIA driver 580 or newer** (any 580+ "Game Ready" or "Studio" driver
+   from nvidia.com). The start scripts check this for you.
+3. **CUDA libraries** (cublasLt 13.4+), one of:
+   - download the `btx-cuda-runtime-*` package from the release and extract it
+     **into the miner folder** (one time, no installation), **or**
+   - have the CUDA Toolkit **13.3** installed (13.0/13.1 are NOT enough — they
+     compute different results and the miner stops by itself).
 
 ## Quick start
-Linux
-```
-tar xzf btx-rc-miner-linux-x86_64.tar.gz && cd btx-rc-miner-linux-x86_64
-nano mine.sh          # put your btx1… address in ADDRESS (POOL is already btx-pool.com:3334)
+
+**Windows**
+1. Extract `btx-rc-miner-windows-x64.zip` to a folder.
+2. No CUDA Toolkit? Extract `btx-cuda-runtime-windows-x64.zip` into the *same* folder.
+3. Open `MINE.bat` with Notepad and put your BTX address in `ADDRESS`.
+   All your GPUs are used by default; set `GPUS=2` or `DEVICES=0,2` to restrict.
+4. Save and double-click `MINE.bat`.
+
+**Linux**
+```bash
+tar xzf btx-rc-miner-linux-x86_64.tar.gz && cd <folder>
+# no CUDA Toolkit? one-time:
+tar xzf ../btx-cuda-runtime-linux-x86_64.tar.gz
+nano mine.sh      # put your BTX address in ADDRESS (all GPUs used by default)
 ./mine.sh
 ```
-Windows: unzip, open `MINE.bat` with Notepad, set `ADDRESS`, save, double-click `MINE.bat`.
 
-Command line (both): `btx-rc-miner --stratum=btx-pool.com:3334 --user=btx1youraddress.rigname --gpus=N` (first N GPUs) or `--devices=0,2` (exactly these GPUs, nvidia-smi ids). In `mine.sh`/`MINE.bat`: `GPUS=N` or `DEVICES=0,2`.
+Your rigs, hashrate, share of the pool and found blocks show up live on
+**[btx-pool.com](https://btx-pool.com)**. No account: the BTX address *is* the account.
 
-## Notes
-- The miner first runs `--bench=1`: it must print `GPU bit-exact    : YES` and `[expected: OK]`. If not, it stops on purpose.
-- `--gpus=N` / `--devices=LIST` start one process per GPU (one connection each); the dashboard shows the machine as one row "rig ×N". `mine.sh`/`MINE.bat` self-test every selected GPU first.
-- Windows: extract the whole zip to a folder before running the .bat files; `BENCH-ALL-GPUS.bat` detects the GPU count with nvidia-smi.
-- The miner's console output is in English.
-- Every share is re-computed by the pool on GPU; rewards are split by proven work. Dashboard: http://btx-pool.com:8090
+## Reliability (v1.1)
+
+The miner **reconnects by itself** if the pool connection drops (2→60 s backoff),
+detects dead/hung connections within 120 s, and the multi-GPU supervisor
+**restarts a GPU process that dies** (driver reset etc.) after 10 s. The start
+scripts add an outer restart loop as a last-resort safety net — you can leave a
+rig unattended.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| `cublasLt64_13.dll not found` | extract `btx-cuda-runtime-windows-x64.zip` into the miner folder, or install CUDA Toolkit 13.3 |
+| closes instantly / "could not start" | NVIDIA driver older than 580 — update it |
+| `GPU bit-exact : NO` | CUDA too old (13.0/13.1) — use the runtime package or Toolkit 13.3 |
+| `connection ... failed` | check the pool address (`btx-pool.com:3334`) and firewall/antivirus |
+
+More in the `README.txt` inside each package.
+
+## Pool
+
+- Stratum v4: `btx-pool.com:3334` — dashboard: [btx-pool.com](https://btx-pool.com)
+- Fee 1.5% — payouts in every found block's coinbase, proportional to verified work.
+- Three mesh-connected pool nodes relay every found block to each other and to
+  the network within milliseconds.
