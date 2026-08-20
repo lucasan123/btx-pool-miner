@@ -20,7 +20,8 @@ Grab the latest packages from the **[Releases page](../../releases/tag/v4)**:
 | `btx-rc-miner-windows-x64.zip` | ~3 MB | the miner (Windows x64) |
 | `btx-rc-miner-linux-x86_64.tar.gz` | ~3 MB | the miner (Linux x86-64) |
 | `btx-cuda-runtime-windows-x64.zip` | ~385 MB | *optional, one-time*: CUDA libraries, if you don't have the CUDA Toolkit installed |
-| `btx-cuda-runtime-linux-x86_64.tar.gz` | ~400 MB | same, for Linux |
+| `btx-cuda-runtime-linux-x86_64.tar.gz` | ~400 MB | same, for Linux (works on older HiveOS/Ubuntu too via a bundled glibc-compat loader) |
+| `btx-rc-miner-hiveos-1.1.tar.gz` | ~3 MB | HiveOS custom miner package (flight-sheet Installation URL) |
 | `SHA256SUMS.txt` | — | checksums of all of the above |
 
 ## Requirements
@@ -53,6 +54,11 @@ tar xzf ../btx-cuda-runtime-linux-x86_64.tar.gz
 nano mine.sh      # put your BTX address in ADDRESS (all GPUs used by default)
 ./mine.sh
 ```
+
+**HiveOS**: Custom miner — Installation URL
+`https://github.com/lucasan123/btx-pool-miner/releases/download/v4/btx-rc-miner-hiveos-1.1.tar.gz`,
+Miner name `btx-rc-miner`, wallet `%WAL%`, Pool URL `btx-pool.com:3334`. Driver 580+
+(`nvidia-driver-update 580`); the first start downloads the CUDA runtime once.
 
 Your rigs, hashrate, share of the pool and found blocks show up live on
 **[btx-pool.com](https://btx-pool.com)**. No account: the BTX address *is* the account.
