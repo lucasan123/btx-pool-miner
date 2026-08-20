@@ -23,7 +23,7 @@ Grab the latest packages from the **[Releases page](../../releases/latest)**:
 | `btx-rc-miner-standalone-linux-x86_64.tar.gz` | ~4 MB | **the miner (Linux x86-64), self-contained — start here** |
 | `btx-rc-miner-hiveos-1.2.tar.gz` | ~6 MB | HiveOS custom miner package (flight-sheet Installation URL), self-contained |
 | `btx-modded-matador-linux-x86_64.tar.gz` | ~27 MB | alternative miner: modded build of the open-source matador (no dev-fee, fast block submit) |
-| `btx-modded-matador-1.0.tar.gz` | ~27 MB | the same, as a HiveOS custom miner package |
+| `btx-modded-matador-1.1.tar.gz` | ~27 MB | the same, as a HiveOS custom miner package |
 | `btx-rc-miner-windows-x64.zip` / `-linux-x86_64.tar.gz` | ~3 MB | classic cuBLASLt build — needs CUDA 13.3+ installed (or the `btx-cuda-runtime-*` package from the [v4 release](../../releases/tag/v4)) |
 | `btx-address-generator.*` | <1 MB | offline BTX address generator (single file) |
 | `SHA256SUMS.txt` | — | checksums of all of the above |
