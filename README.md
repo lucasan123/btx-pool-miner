@@ -21,7 +21,7 @@ Grab the latest packages from the **[Releases page](../../releases/latest)**:
 |---|---|---|
 | `btx-rc-miner-standalone-windows-x64.zip` | ~3 MB | **the miner (Windows x64), self-contained — start here** |
 | `btx-rc-miner-standalone-linux-x86_64.tar.gz` | ~4 MB | **the miner (Linux x86-64), self-contained — start here** |
-| `btx-rc-miner-hiveos-1.2.tar.gz` | ~6 MB | HiveOS custom miner package (flight-sheet Installation URL), self-contained |
+| `btx-rc-miner-1.2.tar.gz` | ~6 MB | HiveOS custom miner package (flight-sheet Installation URL), self-contained |
 | `btx-modded-matador-linux-x86_64.tar.gz` | ~27 MB | alternative miner: modded build of the open-source matador (no dev-fee, fast block submit) |
 | `btx-modded-matador-1.1.tar.gz` | ~27 MB | the same, as a HiveOS custom miner package |
 | `btx-rc-miner-windows-x64.zip` / `-linux-x86_64.tar.gz` | ~3 MB | classic cuBLASLt build — needs CUDA 13.3+ installed (or the `btx-cuda-runtime-*` package from the [v4 release](../../releases/tag/v4)) |
@@ -54,7 +54,7 @@ nano mine.sh      # put your BTX address in ADDRESS (all GPUs used by default)
 ```
 
 **HiveOS**: Custom miner — Installation URL
-`https://github.com/lucasan123/btx-pool-miner/releases/download/v4.1/btx-rc-miner-hiveos-1.2.tar.gz`,
+`https://github.com/lucasan123/btx-pool-miner/releases/download/v4.1/btx-rc-miner-1.2.tar.gz`,
 Miner name `btx-rc-miner`, wallet `%WAL%`, Pool URL `btx-pool.com:3334`. Driver 580+
 (`nvidia-driver-update 580`). No runtime download step anymore.
 
